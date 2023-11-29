@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 
 import gradio as gr
@@ -17,6 +18,9 @@ KSAMPLER_NAMES = [
     "lcm",
 ]
 
+_seed = 156231455165
+fixed_seed = False
+
 css = """
 #generate-btn {min-height: 110px; border: solid 1px green; color: green;}
 .small-btn {width: ; height: ;}
@@ -29,6 +33,22 @@ def checkpoint_list():
         models.append(model.name)
     return models
 
+
+def seed_generator():
+    global fixed_seed
+    fixed_seed = False
+    
+    global _seed
+    _seed = random.randint(1, 999999999999)
+    return _seed
+
+
+def use_last_seed():
+    global fixed_seed
+    fixed_seed = True
+
+    global _seed
+    return _seed
 
 with gr.Blocks(css=css) as demo:
     models = checkpoint_list()
@@ -71,10 +91,13 @@ with gr.Blocks(css=css) as demo:
                     
                     with gr.Row():
                         with gr.Column(scale=2):
-                            seed = gr.Number(label="Seed")
+                            seed = gr.Number(value=seed_generator, label="Seed")
                         with gr.Column(scale=1):
                                 random_seed = gr.Button("Randomize", elem_classes="small-btn")
+                                random_seed.click(seed_generator, None, seed)
+
                                 last_seed = gr.Button("Last Seed", elem_classes="small-btn")
+                                last_seed.click(use_last_seed, None, seed)
 
                 with gr.Column():
                     gr.Image(label="Output", interactive=False)
