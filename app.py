@@ -6,6 +6,7 @@ import gradio as gr
 BASE_FOLDER = Path("D:/AI/ComfyUI_windows_portable/ComfyUI")
 MODELS_FOLDER = BASE_FOLDER / "models/checkpoints"
 
+
 def checkpoint_list():
     models = []
     for model in MODELS_FOLDER.glob("*.safetensors"):
@@ -13,7 +14,7 @@ def checkpoint_list():
     return models
 
 
-with gr.Blocks() as demo:
+with gr.Blocks(css=css) as demo:
     models = checkpoint_list()
     checkpoint = gr.Dropdown(
         choices=models,
@@ -21,8 +22,13 @@ with gr.Blocks() as demo:
     )
 
     with gr.Tab("txt2img"):
-        positive = gr.Textbox(lines=4, placeholder="Positive prompt",container=False)
-        negative = gr.Textbox(lines=4, placeholder="Negative prompt",container=False)
+        with gr.Row():
+            with gr.Column(scale=3):
+                positive = gr.Textbox(lines=4, placeholder="Positive prompt",container=False)
+                negative = gr.Textbox(lines=4, placeholder="Negative prompt",container=False)
+
+            with gr.Column(scale=1):
+                gr.Button("Generate")
     
     with gr.Tab("img2img"):
         pass
