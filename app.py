@@ -17,6 +17,11 @@ KSAMPLER_NAMES = [
     "lcm",
 ]
 
+css = """
+#generate-btn {min-height: 110px; border: solid 1px green; color: green;}
+.small-btn {width: ; height: ;}
+"""
+
 
 def checkpoint_list():
     models = []
@@ -25,7 +30,7 @@ def checkpoint_list():
     return models
 
 
-with gr.Blocks() as demo:
+with gr.Blocks(css=css) as demo:
     models = checkpoint_list()
     
     with gr.Row():
@@ -44,7 +49,7 @@ with gr.Blocks() as demo:
 
             with gr.Column(scale=1):
                 with gr.Row():
-                    gr.Button("Generate")
+                    gr.Button("Generate", elem_id="generate-btn")
 
                 with gr.Row():
                     gr.Dropdown(label="Style 1")
@@ -65,9 +70,11 @@ with gr.Blocks() as demo:
                             cfg = gr.Slider(minimum=1.0, maximum=20.0, step=0.1, label="CFG Scale")
                     
                     with gr.Row():
-                        seed = gr.Number(label="Seed")
-                        random_seed = gr.Button("Random")
-                        last_seed = gr.Button("Last Seed")
+                        with gr.Column(scale=2):
+                            seed = gr.Number(label="Seed")
+                        with gr.Column(scale=1):
+                                random_seed = gr.Button("Randomize", elem_classes="small-btn")
+                                last_seed = gr.Button("Last Seed", elem_classes="small-btn")
 
                 with gr.Column():
                     gr.Image(label="Output", interactive=False)
