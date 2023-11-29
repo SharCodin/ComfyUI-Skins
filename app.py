@@ -17,6 +17,14 @@ with gr.Blocks() as demo:
     models = checkpoint_list()
     checkpoint = gr.Dropdown(
         choices=models,
+        label="Stable Diffusion Checkpoint"
     )
+
+    with gr.Tab("txt2img"):
+        positive = gr.Textbox(lines=4, placeholder="Positive prompt",container=False)
+        negative = gr.Textbox(lines=4, placeholder="Negative prompt",container=False)
+    
+    with gr.Tab("img2img"):
+        pass
 
 demo.launch()
