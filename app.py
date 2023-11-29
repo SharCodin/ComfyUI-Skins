@@ -14,7 +14,7 @@ def checkpoint_list():
     return models
 
 
-with gr.Blocks(css=css) as demo:
+with gr.Blocks() as demo:
     models = checkpoint_list()
     checkpoint = gr.Dropdown(
         choices=models,
